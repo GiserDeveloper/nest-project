@@ -1,0 +1,24 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "blogadmin", 
+    "password": "19960829", 
+    "database": "typeorm-db", 
+    "synchronize": true,
+    "logging": false,
+    "entities": [ 
+       "dist/shared/entity/*.js"
+    ],
+    "migrations": [ 
+       "src/shared/migration/**/*.ts"
+    ],
+    "subscribers": [
+       "src/subscriber/**/*.ts"
+    ],
+    "cli": { 
+       "entitiesDir": "src/shared/entity",
+       "migrationsDir": "src/shared/migration",
+       "subscribersDir": "src/shared/subscriber"
+    }
+}
