@@ -12,6 +12,7 @@ async function bootstrap() {
   .setTitle('中铁大桥局一公司市场部大数据智慧平台-后台接口')
   .setDescription('使用NestJS构建的服务端API')
   .setVersion('1.0')
+  .addBearerAuth()
   .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-docs', app, document);
