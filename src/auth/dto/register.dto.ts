@@ -1,5 +1,6 @@
-import { IsString, MaxLength } from 'class-validator';
+import { IsString, MaxLength, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '../../shared/entity/Role';
 
 export class RegisterDTO {
     @IsString()
@@ -18,4 +19,14 @@ export class RegisterDTO {
         description: '用户描述'
     })
     description: string;
+
+    @IsNumber({
+        allowNaN:false,
+        allowInfinity:false,
+        },{each:true
+    })
+    @ApiProperty({
+        description: '用户角色'
+    })
+    roleId: number;
 }

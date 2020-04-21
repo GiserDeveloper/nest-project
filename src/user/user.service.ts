@@ -5,11 +5,14 @@ import { Repository } from 'typeorm';
 import { UserDTO } from './dto/user.dto';
 import { hashSync } from 'bcryptjs'
 
+import { RoleService } from '../role/role.service';
+
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
         private readonly UserRepo: Repository<User>,
+        private roleService: RoleService
     ){}
     
     //新增用户
@@ -21,17 +24,19 @@ export class UserService {
         userData.password = hashSync(data.password);
       }
       userData.description = data.description;
+      //先要取得role, 再指给user物件下的roles, save时才会存储关联
+      userData.role = await this.roleService.getRoleById(data.roleId);
       return await this.UserRepo.save(userData);
     }
 
     //查找所有用户
     async getUsers(): Promise<User []>{
-      return await this.UserRepo.find();
+      return await this.UserRepo.find({relations: ['role']});
     }
 
     //根据ID查找用户
     async getUserById(id): Promise<User>{
-      return await this.UserRepo.findOne(id);
+      return await this.UserRepo.findOne(id, {relations: ['role']});
     }
 
     //更新用户信息
@@ -43,6 +48,7 @@ export class UserService {
         newUserData.password = hashSync(data.password);
       }
       newUserData.description = data.description;
+      newUserData.role = await this.roleService.getRoleById(data.roleId);
       return await this.UserRepo.update(id,newUserData);
     }
 

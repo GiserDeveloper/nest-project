@@ -19,11 +19,12 @@ export class AuthController {
     @Post('register')
     @ApiOperation({summary: '注册'})
     async register(@Body() dto: RegisterDTO){
-        const { username, password, description } = dto;
+        const { username, password, description,roleId } = dto;
         const user = await this.userService.addUser({
             username: username,
             password: password,
-            description:description
+            description:description,
+            roleId:roleId
         })
         return user;
     }
