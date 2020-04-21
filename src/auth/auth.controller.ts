@@ -1,8 +1,8 @@
 import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiProperty, ApiBearerAuth } from '@nestjs/swagger';
 
-import { UserService } from '../feature/user/user.service';
-import { UserDTO } from 'src/feature/user/userDTO';
+import { UserService } from '../user/user.service';
+import { RegisterDTO } from './dto/register.dto';
 
 import { AuthGuard } from '@nestjs/passport';
 import { LoginDto } from './dto/login.dto'
@@ -18,7 +18,7 @@ export class AuthController {
 
     @Post('register')
     @ApiOperation({summary: '注册'})
-    async register(@Body() dto: UserDTO){
+    async register(@Body() dto: RegisterDTO){
         const { username, password, description } = dto;
         const user = await this.userService.addUser({
             username: username,
@@ -40,7 +40,6 @@ export class AuthController {
     @UseGuards(AuthGuard('jwt'))
     @ApiBearerAuth()
     async user(@Req() req){
-        //return req.user;
         //根据用户ID返回用户信息
         return await this.userService.getUserById(req.user.userId);
     }

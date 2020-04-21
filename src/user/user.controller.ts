@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UsePipes, Get, Put, Delete, Param } from '@nestjs/common';
-import { UserDTO } from './userDTO';
+import { UserDTO } from './dto/user.dto';
 import { UserService } from './user.service';
-import { UserDTOValidationPipe } from '../../shared/pipes/UserDTOValidationPipe'
+import { UserDTOValidationPipe } from '../shared/pipes/UserDTOValidationPipe'
 import { ApiTags, ApiParam, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('用户')
@@ -32,8 +32,19 @@ export class UserController {
         description: '请传入用户ID'
     })
     @ApiOperation({summary: '传入用户ID修改用户'})
-    updateUserById(@Param('userId') id, @Body() userDTO: UserDTO){
-        return this.userService.updateUser(id, userDTO);
+    async updateUserById(@Param('userId') id, @Body() userDTO: UserDTO){
+        const result = await this.userService.updateUser(id, userDTO);
+        let res = {msg: "修改成功！"};
+        let newInfo = {};
+        let user = {newUserInfo: newInfo};
+        if(result.raw.changedRows == 1){
+            //返回修改后的用户
+            let updatedUser = await this.userService.getUserById(id);
+            Object.assign(newInfo,updatedUser);
+            return Object.assign(res,user);
+        }else{
+            return "修改失败！";
+        }
     }
   
     @Delete(':userId')
@@ -42,8 +53,13 @@ export class UserController {
         description: '请传入用户ID'
     })
     @ApiOperation({summary: '删除指定ID的用户'})
-    delete(@Param('userId') id){
-        return this.userService.deleteUser(id);
+    async delete(@Param('userId') id){
+        const result = await this.userService.deleteUser(id);
+        if(result.raw.affectedRows == 1){
+            return "删除指定用户成功！";
+        }else{
+            return "删除指定用户失败！";
+        }
     }
 
     @Get()

@@ -1,14 +1,7 @@
-import { IsString, MaxLength, IsNumber } from 'class-validator';
+import { IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDTO {
-
-    // @IsNumber()
-    // @ApiProperty({
-    //     description: '用户ID(不能为0)'
-    // })
-    // id: number;
-
     @IsString()
     @ApiProperty({
         description: '用户名'

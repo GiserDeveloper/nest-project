@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../shared/entity/User';
+import { User } from '../shared/entity/User';
 import { Repository } from 'typeorm';
-import { UserDTO } from './userDTO';
+import { UserDTO } from './dto/user.dto';
 import { hashSync } from 'bcryptjs'
 
 @Injectable()
@@ -36,7 +36,14 @@ export class UserService {
 
     //更新用户信息
     async updateUser(id, data: UserDTO){
-      return await this.UserRepo.update(id,data);
+      const newUserData = new User();
+      //userData.id = data.id;
+      newUserData.username = data.username;
+      if(data.password){
+        newUserData.password = hashSync(data.password);
+      }
+      newUserData.description = data.description;
+      return await this.UserRepo.update(id,newUserData);
     }
 
     //删除用户信息
