@@ -1,9 +1,14 @@
-import { Controller, Get, Param, Post, UsePipes, ValidationPipe, Body, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Param, Post, UsePipes, ValidationPipe, Body, Delete, Put, UseGuards } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { RoleDTO } from './dto/role.dto';
-import { ApiTags, ApiParam, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiParam, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+
+import { AccessGuard } from '../shared/guards/access.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('角色')
+@UseGuards(AccessGuard,AuthGuard('jwt'))
+@ApiBearerAuth()
 @Controller()
 export class RoleController {
     constructor(

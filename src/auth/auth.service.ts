@@ -16,7 +16,10 @@ export class AuthService {
     }
 
     async login(user:any){
-        const payload = {username:user.username, sub: user.id};
+        //查询用户角色
+        const userRole = (await this.userService.findUserByUsername(user.username)).roleId;
+        //生成签名
+        const payload = {username:user.username, userId: user.id, roleId: userRole};
         return {
             access_token: this.jwtService.sign(payload)
         };

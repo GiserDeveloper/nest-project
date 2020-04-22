@@ -1,11 +1,16 @@
-import { Controller, Post, Body, UsePipes, Get, Put, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes, Get, Put, Delete, Param, UseGuards } from '@nestjs/common';
 import { UserDTO } from './dto/user.dto';
 import { UserService } from './user.service';
 import { UserDTOValidationPipe } from '../shared/pipes/UserDTOValidationPipe'
-import { ApiTags, ApiParam, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiParam, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+
+import { AccessGuard } from '../shared/guards/access.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('用户')
 @Controller('user')
+@UseGuards(AccessGuard,AuthGuard('jwt'))
+@ApiBearerAuth()
 @UsePipes(UserDTOValidationPipe)
 export class UserController {
     constructor(private readonly userService: UserService) {}
