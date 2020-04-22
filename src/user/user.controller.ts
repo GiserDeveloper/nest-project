@@ -9,7 +9,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('用户')
 @Controller('user')
-@UseGuards(AccessGuard,AuthGuard('jwt'))
+@UseGuards(AccessGuard)
 @ApiBearerAuth()
 @UsePipes(UserDTOValidationPipe)
 export class UserController {

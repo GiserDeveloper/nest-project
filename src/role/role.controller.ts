@@ -7,7 +7,7 @@ import { AccessGuard } from '../shared/guards/access.guard';
 import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('角色')
-@UseGuards(AccessGuard,AuthGuard('jwt'))
+@UseGuards(AccessGuard)
 @ApiBearerAuth()
 @Controller()
 export class RoleController {

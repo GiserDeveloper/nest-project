@@ -16,7 +16,13 @@ export class AccessGuard implements CanActivate {
         //利用reflect metadata取得存取资源对应得方法
         const handler = context.getHandler();
         //取得header里的token信息
-        let token = request.headers['authorization'].replace(/\s*/g,"").substr(6);
+        let token;
+        if(request.headers['authorization'] != undefined){
+            token = request.headers['authorization'].replace(/\s*/g,"").substr(6);
+        }else{
+            // token没有直接返回false
+            return false;
+        }
         //验证token是否过期等
         if(verify(token,jwtConstants.secret))
         {
