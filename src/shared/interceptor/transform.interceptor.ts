@@ -1,4 +1,4 @@
-import { Injectable, NestInterceptor, CallHandler, ExecutionContext } from '@nestjs/common';
+import { Injectable, NestInterceptor, CallHandler, ExecutionContext, HttpStatus } from '@nestjs/common';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -13,8 +13,10 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
       map(data => {
         return {
           data,
-          code: 0,
-          message: '请求成功',
+          meta: {
+            msg: '请求成功',
+            status: 0
+          }
         };
       }),
     );

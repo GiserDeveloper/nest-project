@@ -11,11 +11,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors();
-
   //全局注册错误信息过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
   //全局注册拦截器
   app.useGlobalInterceptors(new TransformInterceptor());
+  //设置全局前缀
+  app.setGlobalPrefix('api/private/v1')
 
   const options = new DocumentBuilder()
   .setTitle('中铁大桥局一公司市场部大数据智慧平台-后台接口')
